@@ -3,7 +3,7 @@ from enum import Enum
 
 import inspect
 from dataclasses import dataclass
-from typing import Callable, Generic, Iterator, Literal, ParamSpec, TypeVar
+from typing import Callable, Generic, Iterator, Literal, ParamSpec, TypeVar, overload
 from ._manager import defer
 from ._scope import Scope
 
@@ -22,9 +22,17 @@ class Fixture(Generic[P, R]):
     _iter: Iterator[R] | None = None
     _result: R | Literal[Sentinel.UNSET] = Sentinel.UNSET
 
-    def __get__(self, obj, objtype) -> R:
+    @overload
+    def __get__(self, obj: None, objtype) -> Fixture[P, R]:
+        ...
+
+    @overload
+    def __get__(self, obj: object, objtype) -> R:
+        ...
+
+    def __get__(self, obj, objtype) -> Fixture[P, R] | R:
         if obj is None:
-            return self  # type: ignore[return-value]
+            return self
         return self.__call__()
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs):

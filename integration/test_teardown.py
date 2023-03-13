@@ -2,26 +2,24 @@ from pytypest import fixture
 from typing import Iterator
 
 
-_before = False
-_after = False
+_setup = []
+_teardown = []
 
 
 @fixture
 def fixt() -> Iterator[int]:
-    global _before
-    global _after
-    _before = True
+    _setup.append(0)
     yield 13
-    _after = True
+    _teardown.append(0)
 
 
 def test_simple():
     n = fixt()
     assert n == 13
-    assert _before
-    assert not _after
+    assert _setup == [0]
+    assert _teardown == []
 
 
 def test_after():
-    assert _before
-    assert _after
+    assert _setup == [0]
+    assert _teardown == [0]

@@ -8,10 +8,10 @@ from ._scope_manager import ScopeManager
 _manager: Manager | None = None
 
 
-def defer(callback: Callable[[], None]) -> None:
+def defer(scope: Scope, callback: Callable[[], None]) -> None:
     global _manager
     assert _manager is not None, 'pytest plugin is not activated'
-    scope_manager = _manager._scopes[-1]
+    scope_manager = _manager.get_scope(scope)
     scope_manager.defer(callback)
 
 
@@ -22,6 +22,12 @@ class Manager:
     def set_as_global(self) -> None:
         global _manager
         _manager = self
+
+    def get_scope(self, scope: Scope) -> ScopeManager:
+        for scope_manager in self._scopes:
+            if scope_manager.scope is scope:
+                return scope_manager
+        raise LookupError(f'cannot find ScopeManager for `{scope.value}` scope')
 
     def enter_scope(self, scope: Scope) -> None:
         if not self._scopes:

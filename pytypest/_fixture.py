@@ -1,8 +1,9 @@
 from __future__ import annotations
+from enum import Enum
 
 import inspect
 from dataclasses import dataclass
-from typing import Callable, Generic, Iterator, ParamSpec, TypeVar
+from typing import Callable, Generic, Iterator, Literal, ParamSpec, TypeVar
 from ._manager import defer
 from ._scope import Scope
 
@@ -10,11 +11,16 @@ R = TypeVar('R')
 P = ParamSpec('P')
 
 
+class Sentinel(Enum):
+    UNSET = object()
+
+
 @dataclass
 class Fixture(Generic[P, R]):
     _callback: Callable[P, R | Iterator[R]]
     scope: Scope = Scope.FUNCTION
     _iter: Iterator[R] | None = None
+    _result: R | Literal[Sentinel.UNSET] = Sentinel.UNSET
 
     def __get__(self, obj, objtype) -> R:
         if obj is None:
@@ -22,14 +28,22 @@ class Fixture(Generic[P, R]):
         return self.__call__()
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs):
+        if self.scope != Scope.FUNCTION:
+            if args or kwargs:
+                msg = 'fixtures with non-function scope must not accept arguments'
+                raise ValueError(msg)
         defer(self.scope, self.teardown)
         return self.setup(*args, **kwargs)
 
     def setup(self, *args: P.args, **kwargs: P.kwargs) -> R:
-        if inspect.isgeneratorfunction(self._callback):
-            self._iter = self._callback(*args, **kwargs)
-            return next(self._iter)
-        return self._callback(*args, **kwargs)  # type: ignore[return-value]
+        if self._result is Sentinel.UNSET:
+            self._iter = None
+            if inspect.isgeneratorfunction(self._callback):
+                self._iter = self._callback(*args, **kwargs)
+                self._result = next(self._iter)
+            else:
+                self._result = self._callback(*args, **kwargs)  # type: ignore[assignment]
+        return self._result  # type: ignore[return-value]
 
     def teardown(self) -> None:
         if self._iter is not None:
@@ -38,3 +52,4 @@ class Fixture(Generic[P, R]):
             except StopIteration:
                 pass
             self._iter = None
+            self._result = Sentinel.UNSET

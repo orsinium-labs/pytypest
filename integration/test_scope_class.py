@@ -14,7 +14,13 @@ def fixt() -> Iterator[int]:
 
 
 class TestClass:
-    def test_simple(self):
+    def test_simple_1(self):
+        n = fixt()
+        assert n == 13
+        assert _setup == [0]
+        assert _teardown == []
+
+    def test_simple_2(self):
         n = fixt()
         assert n == 13
         assert _setup == [0]

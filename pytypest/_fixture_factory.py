@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Iterator, ParamSpec, Protocol, TypeVar, overload
+from typing import Callable, Iterator, Literal, ParamSpec, Protocol, TypeVar, overload
 from ._scope import Scope
 from ._fixture import Fixture
 
@@ -21,12 +21,34 @@ class FixtureMaker(Protocol):
         ...
 
 
+class FixtureMakerWithScope(Protocol):
+    @overload
+    def __call__(self, callback: Callable[[], Iterator[R]]) -> Fixture[[], R]:
+        ...
+
+    @overload
+    def __call__(self, callback: Callable[[], R]) -> Fixture[[], R]:
+        ...
+
+    def __call__(self, callback):
+        ...
+
+
 @overload
 def fixture(
     callback: None = None,
     *,
-    scope: Scope = Scope.FUNCTION,
+    scope: Literal[Scope.FUNCTION] = Scope.FUNCTION,
 ) -> FixtureMaker:
+    pass
+
+
+@overload
+def fixture(
+    callback: None = None,
+    *,
+    scope: Scope,
+) -> FixtureMakerWithScope:
     pass
 
 

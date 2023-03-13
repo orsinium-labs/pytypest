@@ -52,4 +52,4 @@ class Fixture(Generic[P, R]):
             except StopIteration:
                 pass
             self._iter = None
-            self._result = Sentinel.UNSET
+        self._result = Sentinel.UNSET

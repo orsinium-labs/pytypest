@@ -2,11 +2,21 @@ from __future__ import annotations
 
 import inspect
 from dataclasses import dataclass
-from typing import Callable, Generic, Iterator, ParamSpec, TypeVar
+from typing import Callable, Generic, Iterator, ParamSpec, TypeVar, overload
 from ._manager import defer
 
 R = TypeVar('R')
 P = ParamSpec('P')
+
+
+@overload
+def fixture(callback: Callable[P, Iterator[R]]) -> Fixture[P, R]:
+    pass
+
+
+@overload
+def fixture(callback: Callable[P, R]) -> Fixture[P, R]:
+    pass
 
 
 def fixture(callback: Callable[P, R | Iterator[R]]) -> Fixture[P, R]:
@@ -35,5 +45,8 @@ class Fixture(Generic[P, R]):
 
     def teardown(self) -> None:
         if self._iter is not None:
-            next(self._iter)
+            try:
+                next(self._iter)
+            except StopIteration:
+                pass
             self._iter = None

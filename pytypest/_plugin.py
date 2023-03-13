@@ -26,8 +26,8 @@ def _manage_scope(request: FixtureRequest) -> Iterator[None]:
     manager.exit_scope(scope)
 
 
-enter_function = pytest.fixture(scope='function')(_manage_scope)
-enter_class = pytest.fixture(scope='class')(_manage_scope)
-enter_module = pytest.fixture(scope='module')(_manage_scope)
-enter_package = pytest.fixture(scope='package')(_manage_scope)
-enter_session = pytest.fixture(scope='session')(_manage_scope)
+enter_function = pytest.fixture(scope='function', autouse=True)(_manage_scope)
+enter_class = pytest.fixture(scope='class', autouse=True)(_manage_scope)
+enter_module = pytest.fixture(scope='module', autouse=True)(_manage_scope)
+enter_package = pytest.fixture(scope='package', autouse=True)(_manage_scope)
+enter_session = pytest.fixture(scope='session', autouse=True)(_manage_scope)

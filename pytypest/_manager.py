@@ -10,7 +10,7 @@ _manager: Manager | None = None
 
 def defer(callback: Callable[[], None]) -> None:
     global _manager
-    assert _manager is not None, 'Manager must be used from test session'
+    assert _manager is not None, 'pytest plugin is not activated'
     scope_manager = _manager._scopes[-1]
     scope_manager.defer(callback)
 

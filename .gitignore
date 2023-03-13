@@ -1,0 +1,4 @@
+/dist/
+/.task/
+.*_cache/
+__pycache__/

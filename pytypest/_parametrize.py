@@ -21,9 +21,11 @@ def parametrize(
     row: ParameterSet | list
     for case in cases:
         bound = sig.bind(*case.args, **case.kwargs)
+        bound.apply_defaults()
         row = [bound.arguments[p] for p in params]
         if case.id or case.tags:
             marks = [getattr(pytest.mark, tag) for tag in (case.tags or [])]
             row = pytest.param(*row, id=case.id, marks=marks)
         table.append(row)
+    func.__defaults__ = ()
     return pytest.mark.parametrize(params, table)(func)

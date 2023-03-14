@@ -12,3 +12,14 @@ test_double = parametrize(
     case(x=3, exp=6),
     case.id('pos-only')(3, 6),
 )
+
+
+def _test_divide(x: int, y: int = 1, *, exp: int):
+    assert x // y == exp
+
+
+test_divide = parametrize(
+    _test_divide,
+    case(8, 2, exp=4),
+    case(3, exp=3),
+)

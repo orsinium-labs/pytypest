@@ -44,14 +44,17 @@ class Fixture(Generic[P, R]):
         return self.setup(*args, **kwargs)
 
     def setup(self, *args: P.args, **kwargs: P.kwargs) -> R:
-        if self._result is Sentinel.UNSET:
-            self._iter = None
-            if inspect.isgeneratorfunction(self._callback):
-                self._iter = self._callback(*args, **kwargs)
-                self._result = next(self._iter)
-            else:
-                self._result = self._callback(*args, **kwargs)  # type: ignore[assignment]
-        return self._result  # type: ignore[return-value]
+        if self._result is not Sentinel.UNSET and not args and not kwargs:
+            return self._result  # type: ignore[return-value]
+        self._iter = None
+        if inspect.isgeneratorfunction(self._callback):
+            self._iter = self._callback(*args, **kwargs)
+            result = next(self._iter)
+        else:
+            result = self._callback(*args, **kwargs)  # type: ignore[assignment]
+        if not args and not kwargs:
+            self._result = result
+        return result
 
     def teardown(self) -> None:
         if self._iter is not None:

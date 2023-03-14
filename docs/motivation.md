@@ -1,0 +1,17 @@
+# Motivation
+
+The framework was created to solve very specific problems with pytest inherit in its design.
+
+## pytest.fixture
+
+1. **Fixtures aren't type annotated**. To have an autocomplete for a fixture inside of test function, I have to explicitly annotate the fixture each time I use it.
+1. **Fixtures aren't namespaced**. Big projects end up with fixtures like `client_with_basket_and_items_in_it`.
+1. **Tests cannot pass parameters into fixtures**. People end up making awful workarounds like overriding fixtures, or parametrizing the test for just the fixture, and it's all very implicit and hard to maintain.
+1. **Fixtures can be overriden in submodules**. When there is a test function that uses `parcel` fixture, and the project defines 6 different fixtures with the same name, you need to check each one of them, and find the one that shares the most of the path with the test.
+1. **Go-to-definition on fixtures doesn't work**. Again, each time you want to see the fixture implementation, it turns into a treasure hunt.
+
+## pytest.mark.parametrize
+
+1. **Arguments are positional-only**. It's ok when you have only 1-2 arguments, but when the parametrization includes multiple parameters, it gets impossible to read. You can use a dict for each parameter, but that makes sense only for relevant items, and you won't get autocomplete.
+1. **Arguments can't have default values**. If you have a parameter that differs in 90% of cases, you still have to repeat it for each case.
+1. **Arguments aren't type-safe**. Type-checking tests helps to ensure that type annotations for your code reflect how you use it. Without it, type annotations may lie. And documentation that lies is worse than no documentation.

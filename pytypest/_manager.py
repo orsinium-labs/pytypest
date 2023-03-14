@@ -4,24 +4,19 @@ from dataclasses import dataclass, field
 from typing import Callable
 from ._scope import Scope
 from ._scope_manager import ScopeManager
-
-_manager: Manager | None = None
+from ._hub import hub
 
 
 def defer(scope: Scope, callback: Callable[[], None]) -> None:
-    global _manager
-    assert _manager is not None, 'pytest plugin is not activated'
-    scope_manager = _manager.get_scope(scope)
+    if hub.manager is None:
+        raise RuntimeError('pytest plugin is not activated')
+    scope_manager = hub.manager.get_scope(scope)
     scope_manager.defer(callback)
 
 
 @dataclass
 class Manager:
     _scopes: list[ScopeManager] = field(default_factory=list)
-
-    def set_as_global(self) -> None:
-        global _manager
-        _manager = self
 
     def get_scope(self, scope: Scope) -> ScopeManager:
         for scope_manager in self._scopes:

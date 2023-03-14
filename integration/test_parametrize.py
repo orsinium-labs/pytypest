@@ -10,4 +10,5 @@ test_double = parametrize(
     case(3, 6),
     case(3, exp=6),
     case(x=3, exp=6),
+    case.id('pos-only')(3, 6),
 )

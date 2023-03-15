@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-from typing import (
-    Callable, Iterator, Literal, ParamSpec, Protocol, TypeVar, overload,
-)
+from typing import TYPE_CHECKING, Protocol, overload
 
 from ._fixture import Fixture
 from ._scope import Scope
 
 
-R = TypeVar('R')
-P = ParamSpec('P')
+if TYPE_CHECKING:
+    from typing import Callable, Iterator, Literal, ParamSpec, TypeVar
+
+    R = TypeVar('R')
+    P = ParamSpec('P')
 
 
 class FixtureMaker(Protocol):
@@ -26,6 +27,13 @@ class FixtureMaker(Protocol):
 
 
 class FixtureMakerWithScope(Protocol):
+    """
+    The type of the callback returned by the @fixture
+    when non-function `scope` is passed.
+
+    For non-function scope, fixtures must not accept arguments.
+    The reason is that it cannot be properly cached.
+    """
     @overload
     def __call__(self, callback: Callable[[], Iterator[R]]) -> Fixture[[], R]:
         ...

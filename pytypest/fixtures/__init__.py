@@ -1,4 +1,9 @@
 from __future__ import annotations
+from ._misc import (
+    defer,
+    enter_context,
+    forbid_networking,
+)
 from ._pytest import (
     get_request,
     get_pytest_fixture,
@@ -13,6 +18,7 @@ from ._pytest import (
 )
 
 __all__ = [
+    # pytest
     'capture_logs',
     'capture_std',
     'chdir',
@@ -23,4 +29,9 @@ __all__ = [
     'record_warnings',
     'update_doctest_namespace',
     'update_environ',
+
+    # misc
+    'defer',
+    'enter_context',
+    'forbid_networking',
 ]

@@ -22,10 +22,12 @@ def get_pytest_fixture(name: str) -> Any:
 
 
 @fixture
-def capture_std(binary: bool = False) -> pytest.CaptureFixture:
-    if binary:
-        return get_pytest_fixture('capsysbinary')
-    return get_pytest_fixture('capsys')
+def capture_std(binary: bool = False, fd: bool = False) -> pytest.CaptureFixture:
+    """Capture stdout and stderr.
+    """
+    root = 'fd' if fd else 'sys'
+    suffix = 'binary' if binary else ''
+    return get_pytest_fixture(f'cap{root}{suffix}')
 
 
 @fixture

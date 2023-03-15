@@ -57,7 +57,7 @@ class Fixture(Generic[P, R]):
             result = next(iterator)
             self._iters.append(iterator)
         else:
-            result = self._callback(*args, **kwargs)  # type: ignore[assignment]
+            result = self._callback(*args, **kwargs)
         if not args and not kwargs:
             self._result = result
         return result

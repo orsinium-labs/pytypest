@@ -1,3 +1,5 @@
+"""The most basic test for the most basic fixture.
+"""
 from pytypest import fixture
 
 

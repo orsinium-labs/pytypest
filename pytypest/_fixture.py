@@ -2,7 +2,7 @@ from __future__ import annotations
 from enum import Enum
 
 import inspect
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Callable, Generic, Iterator, Literal, ParamSpec, TypeVar, overload
 from ._manager import defer
 from ._scope import Scope
@@ -19,7 +19,7 @@ class Sentinel(Enum):
 class Fixture(Generic[P, R]):
     _callback: Callable[P, R | Iterator[R]]
     scope: Scope = Scope.FUNCTION
-    _iter: Iterator[R] | None = None
+    _iters: list[Iterator[R]] = field(default_factory=list)
     _result: R | Literal[Sentinel.UNSET] = Sentinel.UNSET
 
     @overload
@@ -48,10 +48,10 @@ class Fixture(Generic[P, R]):
         return result
 
     def setup(self, *args: P.args, **kwargs: P.kwargs) -> R:
-        self._iter = None
         if inspect.isgeneratorfunction(self._callback):
-            self._iter = self._callback(*args, **kwargs)
-            result = next(self._iter)
+            iterator = self._callback(*args, **kwargs)
+            result = next(iterator)
+            self._iters.append(iterator)
         else:
             result = self._callback(*args, **kwargs)  # type: ignore[assignment]
         if not args and not kwargs:
@@ -59,12 +59,12 @@ class Fixture(Generic[P, R]):
         return result
 
     def teardown(self) -> None:
-        if self._iter is not None:
+        for iterator in self._iters:
             try:
-                next(self._iter)
+                next(iterator)
             except StopIteration:
                 pass
             else:
                 raise RuntimeError('fixture must have at most one yield')
-            self._iter = None
+        self._iters = []
         self._result = Sentinel.UNSET

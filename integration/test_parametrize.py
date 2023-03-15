@@ -1,3 +1,5 @@
+"""The basic test for `parametrize` and `case`.
+"""
 from pytypest import parametrize, case
 
 

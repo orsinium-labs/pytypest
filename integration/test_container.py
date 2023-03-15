@@ -1,3 +1,7 @@
+"""Fixtures can be combined into containers.
+
+Fixtures in a container instance must be available without calling them.
+"""
 from pytypest import fixture
 
 

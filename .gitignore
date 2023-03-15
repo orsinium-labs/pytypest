@@ -2,3 +2,5 @@
 /.task/
 .*_cache/
 __pycache__/
+/.coverage
+/htmlcov/

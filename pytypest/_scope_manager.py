@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from collections import deque
 from dataclasses import dataclass, field
 from typing import Callable
-from collections import deque
+
 from ._scope import Scope
+
 
 Finalizer = Callable[[], None]
 

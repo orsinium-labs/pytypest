@@ -1,9 +1,11 @@
 from __future__ import annotations
-from dataclasses import dataclass
+
 import socket
-from typing import Callable, Iterator, Sequence, TypeVar, ContextManager
+from dataclasses import dataclass
+from typing import Callable, ContextManager, Iterator, Sequence, TypeVar
 
 import pytest
+
 from .._fixture_factory import fixture
 
 

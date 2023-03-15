@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Callable
+
+from ._hub import hub
 from ._scope import Scope
 from ._scope_manager import ScopeManager
-from ._hub import hub
 
 
 def defer(scope: Scope, callback: Callable[[], None]) -> None:

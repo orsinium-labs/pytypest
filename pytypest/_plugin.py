@@ -1,9 +1,13 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING, Iterator
+
 import pytest
-from ._scope import Scope
-from ._manager import Manager
+
 from ._hub import hub
+from ._manager import Manager
+from ._scope import Scope
+
 
 if TYPE_CHECKING:
     from _pytest.fixtures import FixtureRequest

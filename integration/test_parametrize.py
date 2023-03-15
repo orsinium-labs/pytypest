@@ -1,6 +1,6 @@
 """The basic test for `parametrize` and `case`.
 """
-from pytypest import parametrize, case
+from pytypest import case, parametrize
 
 
 def _test_double(x: int, exp: int):

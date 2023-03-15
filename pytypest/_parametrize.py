@@ -1,9 +1,12 @@
 from __future__ import annotations
+
 import inspect
 from typing import TYPE_CHECKING, Callable, ParamSpec
 
 import pytest
+
 from ._case import Case
+
 
 if TYPE_CHECKING:
     from _pytest.mark import ParameterSet

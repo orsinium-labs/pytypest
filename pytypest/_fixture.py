@@ -1,11 +1,15 @@
 from __future__ import annotations
-from enum import Enum
 
 import inspect
 from dataclasses import dataclass, field
-from typing import Callable, Generic, Iterator, Literal, ParamSpec, TypeVar, overload
+from enum import Enum
+from typing import (
+    Callable, Generic, Iterator, Literal, ParamSpec, TypeVar, overload,
+)
+
 from ._manager import defer
 from ._scope import Scope
+
 
 R = TypeVar('R')
 P = ParamSpec('P')

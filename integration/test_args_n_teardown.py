@@ -1,7 +1,8 @@
 """Teardown must be executed for fixtures with arguments.
 """
-from pytypest import fixture
 from typing import Iterator
+
+from pytypest import fixture
 
 
 _setup = []

@@ -4,7 +4,9 @@ Teardown for fixtures must be executed in the reverse order to how they are call
 So, the first called fixture is teared down the last.
 """
 from __future__ import annotations
+
 from typing import Iterator
+
 from pytypest import fixture
 
 

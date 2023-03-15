@@ -1,8 +1,12 @@
 from __future__ import annotations
 
-from typing import Callable, Iterator, Literal, ParamSpec, Protocol, TypeVar, overload
-from ._scope import Scope
+from typing import (
+    Callable, Iterator, Literal, ParamSpec, Protocol, TypeVar, overload,
+)
+
 from ._fixture import Fixture
+from ._scope import Scope
+
 
 R = TypeVar('R')
 P = ParamSpec('P')

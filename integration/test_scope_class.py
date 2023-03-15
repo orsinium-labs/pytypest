@@ -1,7 +1,8 @@
 """Teardown for class-scoped fixtures is executed after leaving the class scope.
 """
-from pytypest import fixture, Scope
 from typing import Iterator
+
+from pytypest import Scope, fixture
 
 
 _setup = []

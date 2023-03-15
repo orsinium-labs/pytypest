@@ -1,7 +1,8 @@
 """Fixtures with arguments aren't cached.
 """
-from pytypest import fixture
 from typing import Iterator
+
+from pytypest import fixture
 
 
 _setup = []

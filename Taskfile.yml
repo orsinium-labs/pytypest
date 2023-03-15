@@ -102,7 +102,7 @@ tasks:
     desc: "run Python integration tests for pytest"
     deps:
       - install:test
-    vars:
+    env:
       PYTEST_PLUGINS: pytypest._plugin
     cmds:
       - "{{.TEST_PYTHON}} -m pytest {{.CLI_ARGS}}"

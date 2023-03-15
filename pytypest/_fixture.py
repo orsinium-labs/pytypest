@@ -35,17 +35,19 @@ class Fixture(Generic[P, R]):
             return self
         return self.__call__()
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs) -> R:
         if self.scope != Scope.FUNCTION:
             if args or kwargs:
                 msg = 'fixtures with non-function scope must not accept arguments'
                 raise ValueError(msg)
+        is_cached = self._result != Sentinel.UNSET and not args and not kwargs
+        if is_cached:
+            return self._result  # type: ignore[return-value]
+        result = self.setup(*args, **kwargs)
         defer(self.scope, self.teardown)
-        return self.setup(*args, **kwargs)
+        return result
 
     def setup(self, *args: P.args, **kwargs: P.kwargs) -> R:
-        if self._result is not Sentinel.UNSET and not args and not kwargs:
-            return self._result  # type: ignore[return-value]
         self._iter = None
         if inspect.isgeneratorfunction(self._callback):
             self._iter = self._callback(*args, **kwargs)
@@ -62,5 +64,7 @@ class Fixture(Generic[P, R]):
                 next(self._iter)
             except StopIteration:
                 pass
+            else:
+                raise RuntimeError('fixture must have at most one yield')
             self._iter = None
         self._result = Sentinel.UNSET

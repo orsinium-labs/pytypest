@@ -24,6 +24,10 @@ def _manage_scope(request: FixtureRequest) -> Iterator[None]:
     manager: Manager = getattr(request.session, SESSION_ATTR)
     scope = Scope(request.scope)
     manager.enter_scope(scope)
+    if hub.autouse:
+        for fixture in hub.autouse:
+            if fixture.scope == scope:
+                fixture()
     yield
     manager.exit_scope(scope)
     hub.request = None

@@ -41,9 +41,8 @@ class Fixture(Generic[P, R]):
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> R:
         if self.scope != Scope.FUNCTION:
-            if args or kwargs:
-                msg = 'fixtures with non-function scope must not accept arguments'
-                raise ValueError(msg)
+            msg = 'fixtures with non-function scope must not accept arguments'
+            assert not args and not kwargs, msg
         is_cached = self._result != Sentinel.UNSET and not args and not kwargs
         if is_cached:
             return self._result  # type: ignore[return-value]

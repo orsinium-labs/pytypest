@@ -24,7 +24,7 @@ def get_pytest_fixture(name: str) -> Any:
 
 
 @fixture
-def capture_std(binary: bool = False, fd: bool = False) -> pytest.CaptureFixture:
+def capture_std(*, binary: bool = False, fd: bool = False) -> pytest.CaptureFixture:
     """Capture stdout and stderr.
     """
     root = 'fd' if fd else 'sys'

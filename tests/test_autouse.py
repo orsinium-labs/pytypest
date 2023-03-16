@@ -26,4 +26,7 @@ def test_autouse(isolated, scoped) -> None:
     assert log == []
     with scoped('class'):
         assert log == ['s']
+        with scoped('function'):
+            assert log == ['s']
+        assert log == ['s']
     assert log == ['s', 't']

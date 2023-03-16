@@ -16,14 +16,14 @@ if TYPE_CHECKING:
 class FixtureMaker(Protocol):
     @overload
     def __call__(self, callback: Callable[P, Iterator[R]]) -> Fixture[P, R]:
-        ...
+        pass
 
     @overload
     def __call__(self, callback: Callable[P, R]) -> Fixture[P, R]:
-        ...
+        pass
 
     def __call__(self, callback):
-        ...
+        pass
 
 
 class FixtureMakerWithScope(Protocol):
@@ -36,14 +36,14 @@ class FixtureMakerWithScope(Protocol):
     """
     @overload
     def __call__(self, callback: Callable[[], Iterator[R]]) -> Fixture[[], R]:
-        ...
+        pass
 
     @overload
     def __call__(self, callback: Callable[[], R]) -> Fixture[[], R]:
-        ...
+        pass
 
     def __call__(self, callback):
-        ...
+        pass
 
 
 @overload

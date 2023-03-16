@@ -27,11 +27,13 @@ def scoped(request: pytest.FixtureRequest) -> Iterator[Callable]:
         request._scope = Scope(scope)
         it = _plugin._manage_scope(request)
         next(it)
-        yield
         try:
-            next(it)
-        except StopIteration:
-            pass
-        request._scope = old_scope
+            yield
+        finally:
+            try:
+                next(it)
+            except StopIteration:
+                pass
+            request._scope = old_scope
 
     yield wrapper

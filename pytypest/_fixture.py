@@ -28,11 +28,11 @@ class Fixture(Generic[P, R]):
 
     @overload
     def __get__(self, obj: None, objtype) -> Fixture[P, R]:
-        ...
+        pass
 
     @overload
     def __get__(self, obj: object, objtype) -> R:
-        ...
+        pass
 
     def __get__(self, obj, objtype) -> Fixture[P, R] | R:
         if obj is None:

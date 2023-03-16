@@ -26,8 +26,8 @@ class Manager:
         raise LookupError(f'cannot find ScopeManager for `{scope.value}` scope')
 
     def enter_scope(self, scope: Scope) -> None:
-        if not self._scopes:
-            assert scope == Scope.SESSION
+        # if not self._scopes:
+        #     assert scope == Scope.SESSION
         # else:
         #     assert self._scopes[-1].scope > scope
         scope_manager = ScopeManager(scope)

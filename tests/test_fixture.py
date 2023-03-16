@@ -1,7 +1,8 @@
-from pytypest import fixture
+from typing import Callable
+from pytypest import fixture, Scope
 
 
-def test_setup_return():
+def test_setup_return() -> None:
     log = []
 
     @fixture
@@ -13,7 +14,7 @@ def test_setup_return():
     assert log == [42]
 
 
-def test_setup_yield():
+def test_setup_yield() -> None:
     log = []
 
     @fixture
@@ -25,7 +26,7 @@ def test_setup_yield():
     assert log == [42]
 
 
-def test_teardown_return():
+def test_teardown_return() -> None:
     @fixture
     def fixt():
         return 13
@@ -35,7 +36,7 @@ def test_teardown_return():
     fixt.teardown()
 
 
-def test_teardown_yield():
+def test_teardown_yield() -> None:
     log = []
 
     @fixture
@@ -47,3 +48,23 @@ def test_teardown_yield():
     assert fixt.setup() == 13
     fixt.teardown()
     assert log == [42]
+
+
+def test_teardown_on_leaving_scope(isolated: None, scoped: Callable) -> None:
+    log = []
+
+    @fixture(scope=Scope.CLASS)
+    def fixt():
+        log.append('s')
+        yield 62
+        log.append('t')
+
+    with scoped('class'):
+        with scoped('function'):
+            assert log == []
+            for _ in range(4):
+                assert fixt() == 62
+                assert log == ['s']
+        assert log == ['s']
+
+    assert log == ['s', 't']

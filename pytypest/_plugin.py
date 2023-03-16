@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Iterator
+from typing import Iterator
 
 import pytest
 
@@ -9,21 +9,16 @@ from ._manager import Manager
 from ._scope import Scope
 
 
-if TYPE_CHECKING:
-    from _pytest.fixtures import FixtureRequest
-    from _pytest.main import Session
-
-
 SESSION_ATTR = '_pytypest_manager'
 
 
-def pytest_sessionstart(session: Session) -> None:
+def pytest_sessionstart(session: pytest.Session) -> None:
     manager = Manager()
     hub.manager = manager
     setattr(session, SESSION_ATTR, manager)
 
 
-def _manage_scope(request: FixtureRequest) -> Iterator[None]:
+def _manage_scope(request: pytest.FixtureRequest) -> Iterator[None]:
     hub.request = request
     manager: Manager = getattr(request.session, SESSION_ATTR)
     scope = Scope(request.scope)

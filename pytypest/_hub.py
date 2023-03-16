@@ -19,5 +19,10 @@ class Hub:
     request: pytest.FixtureRequest | None = None
     autouse: tuple[Fixture[[], None], ...] | None = None
 
+    def reset(self) -> None:
+        self.manager = None
+        self.request = None
+        self.autouse = None
+
 
 hub = Hub()

@@ -28,7 +28,7 @@ def parametrize(
         row = [bound.arguments[p] for p in params]
         if case.id or case.tags:
             marks = [getattr(pytest.mark, tag) for tag in (case.tags or [])]
-            row = pytest.param(*row, id=case.id, marks=marks)
+            row = pytest.param(*row, id=case.id, marks=tuple(marks))
         table.append(row)
     func.__defaults__ = ()
     return pytest.mark.parametrize(params, table)(func)

@@ -1,0 +1,29 @@
+import pytest
+from pytypest import autouse, fixture, Scope
+
+
+def test_double_autouse(isolated) -> None:
+    @fixture
+    def fixt():
+        yield
+
+    autouse(fixt)
+    msg = 'autouse can be called only once'
+    with pytest.raises(RuntimeError, match=msg):
+        autouse(fixt)
+
+
+def test_autouse(isolated, scoped) -> None:
+    log = []
+
+    @fixture(scope=Scope.CLASS)
+    def fixt():
+        log.append('s')
+        yield
+        log.append('t')
+
+    autouse(fixt)
+    assert log == []
+    with scoped('class'):
+        assert log == ['s']
+    assert log == ['s', 't']

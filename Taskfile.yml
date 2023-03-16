@@ -97,7 +97,7 @@ tasks:
     deps:
       - install:test
     cmds:
-      - "{{.TEST_PYTHON}} -m pytest {{.CLI_ARGS}} --cov-fail-under=74 tests/"
+      - "{{.TEST_PYTHON}} -m pytest {{.CLI_ARGS}} --cov-fail-under=79 tests/"
   pytest:integration:
     desc: "run Python integration tests for pytest"
     deps:

@@ -1,8 +1,9 @@
+import os
 from pathlib import Path
 
 import pytest
+
 from pytypest import fixtures
-import os
 
 
 def test_get_request(isolated, scoped) -> None:

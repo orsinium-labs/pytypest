@@ -1,7 +1,8 @@
 from typing import Callable
 
 import pytest
-from pytypest import fixture, Scope
+
+from pytypest import Scope, fixture
 
 
 def test_setup_return() -> None:

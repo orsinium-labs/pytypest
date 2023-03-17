@@ -1,8 +1,12 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 import pytest
-from pytypest import parametrize, case
+
+from pytypest import case, parametrize
+
+
 if TYPE_CHECKING:
     from _pytest.mark.structures import Mark
 

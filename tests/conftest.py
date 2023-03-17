@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from typing import Callable, Iterator
 
 import pytest
+
 from pytypest import _plugin
 from pytypest._hub import hub
 

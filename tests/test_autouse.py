@@ -1,5 +1,6 @@
 import pytest
-from pytypest import autouse, fixture, Scope
+
+from pytypest import Scope, autouse, fixture
 
 
 def test_double_autouse(isolated) -> None:

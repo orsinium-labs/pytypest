@@ -105,3 +105,13 @@ def test_disallow_double_yield(isolated, scoped):
     with pytest.raises(RuntimeError, match=msg):
         with scoped('function'):
             fixt()
+
+
+def test_plugin_not_active():
+    @fixture
+    def fixt():
+        yield
+
+    msg = 'pytest plugin is not activated'
+    with pytest.raises(RuntimeError, match=msg):
+        fixt()

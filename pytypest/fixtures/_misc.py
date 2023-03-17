@@ -45,8 +45,8 @@ class NetworkGuard:
 
 @fixture
 def forbid_networking(
-    allowed_hosts: Sequence[str],
-    allowed_ports: Sequence[int],
+    allowed_hosts: Sequence[str] = (),
+    allowed_ports: Sequence[int] = (),
 ) -> Iterator[None]:
     guard = NetworkGuard(
         allowed_hosts=frozenset(allowed_hosts),

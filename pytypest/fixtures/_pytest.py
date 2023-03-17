@@ -60,10 +60,10 @@ def record_warnings() -> pytest.WarningsRecorder:
 
 
 @fixture
-def make_temp_dir(basename: str | None = None) -> Path:
+def make_temp_dir(basename: str | None = None, numbered: bool = True) -> Path:
     factory: pytest.TempPathFactory = get_pytest_fixture('tmp_path_factory')
     if basename is not None:
-        return factory.mktemp(basename=basename)
+        return factory.mktemp(basename=basename, numbered=numbered)
     return factory.getbasetemp()
 
 

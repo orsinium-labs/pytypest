@@ -71,3 +71,9 @@ class Fixture(Generic[P, R]):
                 raise RuntimeError('fixture must have at most one yield')
         self._iters = []
         self._result = Sentinel.UNSET
+
+    def __enter__(self) -> R:
+        return self.setup()
+
+    def __exit__(self, *exc_info) -> None:
+        self.teardown()

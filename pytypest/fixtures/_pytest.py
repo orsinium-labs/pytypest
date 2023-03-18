@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 import pytest
 
@@ -50,11 +49,6 @@ def update_doctest_namespace(
 
 
 @fixture
-def monkeypatch() -> pytest.MonkeyPatch:
-    return get_pytest_fixture('monkeypatch')
-
-
-@fixture
 def record_warnings() -> pytest.WarningsRecorder:
     return get_pytest_fixture('recwarn')
 
@@ -65,21 +59,3 @@ def make_temp_dir(basename: str | None = None, numbered: bool = True) -> Path:
     if basename is not None:
         return factory.mktemp(basename=basename, numbered=numbered)
     return factory.getbasetemp()
-
-
-@fixture
-def chdir(path: Path) -> None:
-    monkeypatch().chdir(path)
-
-
-@fixture
-def update_environ(
-    _new: dict[str, str] | None = None,
-    **kwargs: str,
-) -> Mapping[str, str]:
-    patcher = monkeypatch()
-    for name, value in (_new or {}).items():
-        patcher.setenv(name, value)
-    for name, value in kwargs.items():
-        patcher.setenv(name, value)
-    return os.environ

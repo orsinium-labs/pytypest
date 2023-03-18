@@ -2,7 +2,7 @@ from __future__ import annotations
 import os
 
 from pathlib import Path
-from typing import Iterator, Mapping
+from typing import Iterator, Mapping, overload
 import unittest.mock
 
 import pytest
@@ -45,11 +45,54 @@ def update_environ(
     patcher.undo()
 
 
-def setattr(*args, **kwargs) -> Iterator[None]:
+@overload
+def _setattr(
+    __target: str, __value: object, *, raising: bool = True,
+) -> Iterator[None]:
+    pass
+
+
+@overload
+def _setattr(
+    __target: object, __name: str, __value: object, *, raising: bool = True,
+) -> Iterator[None]:
+    pass
+
+
+def _setattr(__target, __name: str | object, *args, **kwargs) -> Iterator[None]:
     patcher = pytest.MonkeyPatch()
-    patcher.setattr(*args, **kwargs)
+    patcher.setattr(__target, __name, *args, **kwargs)
     yield
     patcher.undo()
+
+
+setattr = fixture(_setattr)
+
+
+@overload
+def _delattr(
+    __target: str, *, raising: bool = True,
+) -> Iterator[None]:
+    pass
+
+
+@overload
+def _delattr(
+    __target: object, __name: str, *, raising: bool = True,
+) -> Iterator[None]:
+    pass
+
+
+def _delattr(__target: str | object, *args, **kwargs) -> Iterator[None]:
+    """Delete attribute of an object.
+    """
+    patcher = pytest.MonkeyPatch()
+    patcher.delattr(__target, *args, **kwargs)
+    yield
+    patcher.undo()
+
+
+delattr = fixture(_delattr)
 
 
 @fixture

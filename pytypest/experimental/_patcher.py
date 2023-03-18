@@ -38,12 +38,15 @@ class ItemPatcher(Generic[K, V]):
     ) -> None:
         self.__patcher = patcher
         self.__target = target
+        self.__used: bool = False
 
     def __setitem__(self, name: K, value: V) -> None:
         self.__patcher.setitem(self.__target, name, value)
+        self.__used = True
 
     def __delitem__(self, name: K) -> None:
         self.__patcher.delitem(self.__target, name)
+        self.__used = True
 
 
 @fixture
@@ -56,5 +59,8 @@ def patcher(target: object | str) -> Iterator[AttrPatcher]:
 @fixture
 def item_patcher(target: MutableMapping[K, V]) -> Iterator[ItemPatcher[K, V]]:
     monkey_patcher = pytest.MonkeyPatch()
-    yield ItemPatcher(monkey_patcher, target)
+    item_patcher = ItemPatcher(monkey_patcher, target)
+    yield item_patcher
     monkey_patcher.undo()
+    if not item_patcher.__used:
+        raise RuntimeError('item_patcher is instantiated but not used')

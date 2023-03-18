@@ -38,6 +38,7 @@ lint = [
     "isort",
     "mypy",
     "unify",
+    "types-requests",
 ]
 docs = [
     "sphinx",
@@ -49,7 +50,7 @@ docs = [
 Source = "https://github.com/orsinium-labs/pytypest"
 
 [tool.mypy]
-files = ["pytypest"]
+files = ["pytypest", "tests", "integration"]
 python_version = "3.10"
 ignore_missing_imports = true
 # follow_imports = "silent"

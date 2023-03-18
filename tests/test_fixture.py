@@ -115,3 +115,21 @@ def test_plugin_not_active():
     msg = 'pytest plugin is not activated'
     with pytest.raises(RuntimeError, match=msg):
         fixt()
+
+
+def test_context_manager(isolated, scoped):
+    log = []
+
+    @fixture
+    def fixt():
+        log.append('s')
+        yield 67
+        log.append('t')
+
+    with scoped('function'):
+        assert log == []
+        with fixt as val:
+            assert log == ['s']
+            assert val == 67
+        assert log == ['s', 't']
+    assert log == ['s', 't']

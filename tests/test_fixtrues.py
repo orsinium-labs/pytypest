@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from contextlib import contextmanager
 from pathlib import Path
@@ -69,7 +71,6 @@ def test_update_doctest_namespace(isolated, scoped, tmp_path) -> None:
     (lambda: fixtures.capture_std(binary=True, fd=True), 'capfdbinary'),
     (fixtures.capture_logs, 'caplog'),
     (fixtures.update_doctest_namespace, 'doctest_namespace'),
-    (fixtures.monkeypatch, 'monkeypatch'),
     (fixtures.record_warnings, 'recwarn'),
 ])
 def test_proxying(isolated, scoped, given, expected, request) -> None:
@@ -137,3 +138,33 @@ def test_forbid_networking__allowed_host_port(isolated, scoped) -> None:
             allowed_ports=[443],
         )
         requests.get('https://example.com/')
+
+
+def test_monkeypatch(isolated, scoped):
+    class A:
+        a = 13
+
+    with scoped('function'):
+        p = fixtures.monkeypatch()
+        p.setattr(A, 'a', 54)
+        assert A.a == 54
+
+
+def test_setattr(isolated, scoped):
+    class A:
+        a = 13
+
+    with scoped('function'):
+        fixtures.setattr(A, 'a', 54)
+        assert A.a == 54
+    assert A.a == 13
+
+
+def test_delattr(isolated, scoped):
+    class A:
+        a = 13
+
+    with scoped('function'):
+        fixtures.delattr(A, 'a')
+        assert not hasattr(A, 'a')
+    assert A.a == 13

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import Generic, Iterator, MutableMapping, TypeVar
+from typing import Any, Generic, Iterator, MutableMapping, TypeVar
 
 import pytest
 
 from .._fixture_factory import fixture
+
 
 K = TypeVar('K')
 V = TypeVar('V')
@@ -20,6 +21,8 @@ class AttrPatcher:
         self.__target = target
 
     def __setattr__(self, name: str, value: object) -> None:
+        if name.startswith('_AttrPatcher__'):
+            return super().__setattr__(name, value)
         if isinstance(self.__target, str):
             self.__target
             self.__patcher.setattr(f'{self.__target}.{name}', value)
@@ -27,6 +30,8 @@ class AttrPatcher:
             self.__patcher.setattr(self.__target, name, value)
 
     def __delattr__(self, name: str) -> None:
+        if name.startswith('_AttrPatcher__'):
+            return super().__delattr__(name)
         self.__patcher.delattr(self.__target, name)
 
 
@@ -50,7 +55,7 @@ class ItemPatcher(Generic[K, V]):
 
 
 @fixture
-def patcher(target: object | str) -> Iterator[AttrPatcher]:
+def patcher(target: object | str) -> Iterator[Any]:
     monkey_patcher = pytest.MonkeyPatch()
     yield AttrPatcher(monkey_patcher, target)
     monkey_patcher.undo()

@@ -1,4 +1,5 @@
-from ._patcher import patcher, item_patcher
+from ._patcher import item_patcher, patcher
+
 
 __all__ = [
     'item_patcher',

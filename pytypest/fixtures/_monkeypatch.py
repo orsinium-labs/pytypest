@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import unittest.mock
 from pathlib import Path
-from typing import Iterator, Mapping, overload
+from typing import Iterator, Mapping
 
 import pytest
 
@@ -45,48 +45,37 @@ def update_environ(
     patcher.undo()
 
 
-@overload
+@fixture
 def setattr(
-    __target: str, __value: object, *, raising: bool = True,
+    target: object | str,
+    name: str,
+    value: object,
+    *,
+    must_exist: bool = True,
 ) -> Iterator[None]:
-    pass
-
-
-@overload
-def setattr(
-    __target: object, __name: str, __value: object, *, raising: bool = True,
-) -> Iterator[None]:
-    pass
-
-
-@fixture  # type: ignore[misc]
-def setattr(__target, __name: str | object, *args, **kwargs) -> Iterator[None]:
     patcher = pytest.MonkeyPatch()
-    patcher.setattr(__target, __name, *args, **kwargs)
+    if isinstance(target, str):
+        patcher.setattr(f'{target}.{name}', value, raising=must_exist)
+    else:
+        patcher.setattr(target, name, value, raising=must_exist)
     yield
     patcher.undo()
 
 
-@overload
+@fixture
 def delattr(
-    __target: str, *, raising: bool = True,
+    target: object | str,
+    name: str,
+    *,
+    must_exist: bool = True,
 ) -> Iterator[None]:
-    pass
-
-
-@overload
-def delattr(
-    __target: object, __name: str, *, raising: bool = True,
-) -> Iterator[None]:
-    pass
-
-
-@fixture  # type: ignore[misc]
-def delattr(__target: str | object, *args, **kwargs) -> Iterator[None]:
     """Delete attribute of an object.
     """
     patcher = pytest.MonkeyPatch()
-    patcher.delattr(__target, *args, **kwargs)
+    if isinstance(target, str):
+        patcher.delattr(f'{target}.{name}', raising=must_exist)
+    else:
+        patcher.delattr(target, name, raising=must_exist)
     yield
     patcher.undo()
 

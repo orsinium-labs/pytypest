@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import unittest.mock
 from pathlib import Path
-from typing import Iterator, Mapping
+from typing import Iterator, Mapping, MutableMapping
 
 import pytest
 
@@ -89,3 +89,11 @@ def mock(target: str | None = None, **kwargs) -> Iterator[unittest.mock.Mock]:
 
     with unittest.mock.patch(target, mock):
         yield mock
+
+
+@fixture
+def preserve_mapping(dct: MutableMapping) -> Iterator[None]:
+    backup = {**dct}
+    yield
+    dct.clear()
+    dct.update(backup)

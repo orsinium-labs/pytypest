@@ -10,6 +10,8 @@ The framework was created to solve very specific problems with pytest inherit in
 1. **Fixtures can be overriden in submodules**. When there is a test function that uses `parcel` fixture, and the project defines 6 different fixtures with the same name, you need to check each one of them, and find the one that shares the most of the path with the test.
 1. **Go-to-definition on fixtures doesn't work**. Again, each time you want to see the fixture implementation, it turns into a treasure hunt.
 1. **The order of fixtures run is implicit**. In theory, the order of fixtures shouldn't matter because they shouldn't have implicit dependencies on each other. On practice, you often will have global side-effects in fixtures that may affect other fixtures. For example, if you add a fixture for [freezegun](https://github.com/spulec/freezegun), the time will be frozen for some fixtures but not others. And when using it as a decorator, the time won't be frozen for any fixtures at all.
+1. **There is no distinction between setup and data fixtures**. When tests gets changed or copy-pasted, you often will have tests that require fixtures that it actually doesn't need. Each such fixture increases coupling and slowes down each test run.
+1. **There is no lazy execution of fixtures**. If a function requires a fixture, it will be executed before the function is even called.
 
 ## pytest.mark.parametrize
 

@@ -168,3 +168,13 @@ def test_delattr(isolated, scoped):
         fixtures.delattr(A, 'a')
         assert not hasattr(A, 'a')
     assert A.a == 13
+
+
+def test_preserve_mapping(isolated, scoped):
+    d = {1: 2, 3: 4, 5: 6}
+    with scoped('function'):
+        fixtures.preserve_mapping(d)
+        d[1] = 7
+        del d[5]
+        assert d == {1: 7, 3: 4}
+    assert d == {1: 2, 3: 4, 5: 6}

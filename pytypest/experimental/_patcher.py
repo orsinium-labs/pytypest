@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Generic, Iterator, MutableMapping, TypeVar
+from typing import Any, Iterator, TypeVar
 
 import pytest
 
@@ -35,37 +35,8 @@ class AttrPatcher:
         self.__patcher.delattr(self.__target, name)
 
 
-class ItemPatcher(Generic[K, V]):
-    def __init__(
-        self,
-        patcher: pytest.MonkeyPatch,
-        target: MutableMapping[K, V],
-    ) -> None:
-        self._patcher = patcher
-        self._target = target
-        self._used: bool = False
-
-    def __setitem__(self, name: K, value: V) -> None:
-        self._patcher.setitem(self._target, name, value)
-        self._used = True
-
-    def __delitem__(self, name: K) -> None:
-        self._patcher.delitem(self._target, name)
-        self._used = True
-
-
 @fixture
 def patcher(target: object | str) -> Iterator[Any]:
     monkey_patcher = pytest.MonkeyPatch()
     yield AttrPatcher(monkey_patcher, target)
     monkey_patcher.undo()
-
-
-@fixture
-def item_patcher(target: MutableMapping[K, V]) -> Iterator[ItemPatcher[K, V]]:
-    monkey_patcher = pytest.MonkeyPatch()
-    item_patcher = ItemPatcher(monkey_patcher, target)
-    yield item_patcher
-    monkey_patcher.undo()
-    if not item_patcher._used:
-        raise RuntimeError('item_patcher is instantiated but not used')

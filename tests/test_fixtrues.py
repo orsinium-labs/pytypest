@@ -10,6 +10,10 @@ import requests
 from pytypest import fixtures
 
 
+class Global:
+    attr: int = 42
+
+
 def test_get_request(isolated, scoped) -> None:
     with scoped('function'):
         req = fixtures.get_request()
@@ -160,6 +164,14 @@ def test_setattr(isolated, scoped):
     assert A.a == 13
 
 
+def test_setattr__str_target(isolated, scoped):
+    target = f'{Global.__module__}.{Global.__name__}'
+    with scoped('function'):
+        fixtures.setattr(target, 'attr', 99)
+        assert Global.attr == 99
+    assert Global.attr == 42
+
+
 def test_delattr(isolated, scoped):
     class A:
         a = 13
@@ -168,6 +180,14 @@ def test_delattr(isolated, scoped):
         fixtures.delattr(A, 'a')
         assert not hasattr(A, 'a')
     assert A.a == 13
+
+
+def test_delattr__str_target(isolated, scoped):
+    target = f'{Global.__module__}.{Global.__name__}'
+    with scoped('function'):
+        fixtures.delattr(target, 'attr')
+        assert not hasattr(Global, 'attr')
+    assert Global.attr == 42
 
 
 def test_preserve_mapping(isolated, scoped):

@@ -81,19 +81,6 @@ def delattr(
 
 
 @fixture
-def mock(target: str | None = None, **kwargs) -> Iterator[unittest.mock.Mock]:
-    mock = unittest.mock.Mock(**kwargs)
-    if not target:
-        yield mock
-        return
-
-    with unittest.mock.patch(target, mock):
-        yield mock
-
-
-@fixture
-def preserve_mapping(dct: MutableMapping) -> Iterator[None]:
-    backup = {**dct}
-    yield
-    dct.clear()
-    dct.update(backup)
+def preserve_mapping(target: MutableMapping) -> Iterator[None]:
+    with unittest.mock.patch.dict(target):
+        yield

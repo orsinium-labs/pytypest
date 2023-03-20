@@ -54,13 +54,6 @@ def test_get_pytest_fixture(isolated, scoped, tmp_path) -> None:
         assert path is tmp_path
 
 
-def test_update_environ(isolated, scoped, tmp_path) -> None:
-    with scoped('function'):
-        fixtures.update_environ({'a': 'b'}, c='d')
-        assert os.environ['a'] == 'b'
-        assert os.environ['c'] == 'd'
-
-
 def test_update_doctest_namespace(isolated, scoped, tmp_path) -> None:
     with scoped('function'):
         ns = fixtures.update_doctest_namespace({'a': 'b'}, c='d')

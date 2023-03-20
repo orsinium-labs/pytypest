@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import unittest.mock
 from pathlib import Path
-from typing import Iterator, Mapping, MutableMapping
+from typing import Iterator, MutableMapping
 
 import pytest
 
@@ -23,26 +23,6 @@ def chdir(path: Path) -> Iterator[None]:
     os.chdir(path)
     yield
     os.chdir(old_path)
-
-
-@fixture
-def update_environ(
-    _new: dict[str, str | None] | None = None,
-    **kwargs: str | None,
-) -> Iterator[Mapping[str, str]]:
-    patcher = pytest.MonkeyPatch()
-    for name, value in (_new or {}).items():
-        if value is None:
-            patcher.delenv(name)
-        else:
-            patcher.setenv(name, value)
-    for name, value in kwargs.items():
-        if value is None:
-            patcher.delenv(name)
-        else:
-            patcher.setenv(name, value)
-    yield os.environ
-    patcher.undo()
 
 
 @fixture

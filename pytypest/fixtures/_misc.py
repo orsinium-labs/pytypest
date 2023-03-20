@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import os
 import socket
-from dataclasses import dataclass
-from typing import Callable, ContextManager, Iterator, Sequence, TypeVar
-
-import pytest
+import unittest.mock
+from pathlib import Path
+from typing import (
+    Callable, ContextManager, Iterator, MutableMapping, Sequence, TypeVar,
+)
 
 from .._fixture_factory import fixture
+from ._helpers import NetworkGuard
 
 
 T = TypeVar('T', covariant=True)
@@ -24,25 +27,6 @@ def enter_context(manager: ContextManager[T]) -> Iterator[T]:
         yield value
 
 
-@dataclass(frozen=True)
-class NetworkGuard:
-    allowed_hosts: frozenset[str]
-    allowed_ports: frozenset[int]
-    wrapped: Callable[..., list]
-
-    def __call__(
-        self,
-        host: bytes | str | None,
-        port: bytes | str | int | None,
-        *args, **kwargs
-    ) -> list:
-        if host not in self.allowed_hosts:
-            pytest.fail('connection to the host is not allowed')
-        if port not in self.allowed_ports:
-            pytest.fail('connection to the port is not allowed')
-        return self.wrapped(host, port, *args, **kwargs)
-
-
 @fixture
 def forbid_networking(
     allowed_hosts: Sequence[str] = (),
@@ -56,3 +40,17 @@ def forbid_networking(
     socket.getaddrinfo = guard
     yield
     socket.getaddrinfo = guard.wrapped
+
+
+@fixture
+def chdir(path: Path) -> Iterator[None]:
+    old_path = os.getcwd()
+    os.chdir(path)
+    yield
+    os.chdir(old_path)
+
+
+@fixture
+def preserve_mapping(target: MutableMapping) -> Iterator[None]:
+    with unittest.mock.patch.dict(target):
+        yield

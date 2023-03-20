@@ -1,33 +1,27 @@
 from __future__ import annotations
 
-from ._misc import defer, enter_context, forbid_networking
-from ._monkeypatch import (
-    chdir, delattr, monkeypatch, preserve_mapping, setattr,
+from ._misc import (
+    chdir, defer, enter_context, forbid_networking, preserve_mapping,
 )
 from ._pytest import (
-    capture_logs, capture_std, get_pytest_fixture, get_request, make_temp_dir,
-    record_warnings,
+    capture_logs, capture_std, delattr, get_pytest_fixture, get_request,
+    make_temp_dir, monkeypatch, record_warnings, setattr,
 )
 
 
 __all__ = [
-    # pytest
     'capture_logs',
     'capture_std',
+    'chdir',
+    'defer',
+    'delattr',
+    'enter_context',
+    'forbid_networking',
     'get_pytest_fixture',
     'get_request',
     'make_temp_dir',
-    'record_warnings',
-
-    # monkey patch
     'monkeypatch',
-    'chdir',
-    'setattr',
-    'delattr',
     'preserve_mapping',
-
-    # misc
-    'defer',
-    'enter_context',
-    'forbid_networking',
+    'record_warnings',
+    'setattr',
 ]

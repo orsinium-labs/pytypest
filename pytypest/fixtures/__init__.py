@@ -6,7 +6,7 @@ from ._monkeypatch import (
 )
 from ._pytest import (
     capture_logs, capture_std, get_pytest_fixture, get_request, make_temp_dir,
-    record_warnings, update_doctest_namespace,
+    record_warnings,
 )
 
 
@@ -18,10 +18,8 @@ __all__ = [
     'get_request',
     'make_temp_dir',
     'record_warnings',
-    'update_doctest_namespace',
 
     # monkey patch
-    'patcher',
     'monkeypatch',
     'chdir',
     'setattr',

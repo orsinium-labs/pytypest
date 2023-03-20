@@ -37,18 +37,6 @@ def capture_logs() -> pytest.LogCaptureFixture:
 
 
 @fixture
-def update_doctest_namespace(
-    _new: dict[str, Any] | None = None,
-    **kwargs: Any,
-) -> dict[str, Any]:
-    ns: dict = get_pytest_fixture('doctest_namespace')
-    if _new:
-        ns.update(_new)
-    ns.update(kwargs)
-    return ns
-
-
-@fixture
 def record_warnings() -> pytest.WarningsRecorder:
     return get_pytest_fixture('recwarn')
 

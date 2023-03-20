@@ -54,20 +54,12 @@ def test_get_pytest_fixture(isolated, scoped, tmp_path) -> None:
         assert path is tmp_path
 
 
-def test_update_doctest_namespace(isolated, scoped, tmp_path) -> None:
-    with scoped('function'):
-        ns = fixtures.update_doctest_namespace({'a': 'b'}, c='d')
-        assert ns['a'] == 'b'
-        assert ns['c'] == 'd'
-
-
 @pytest.mark.parametrize('given, expected', [
     (fixtures.capture_std, 'capsys'),
     (lambda: fixtures.capture_std(binary=True), 'capsysbinary'),
     (lambda: fixtures.capture_std(fd=True), 'capfd'),
     (lambda: fixtures.capture_std(binary=True, fd=True), 'capfdbinary'),
     (fixtures.capture_logs, 'caplog'),
-    (fixtures.update_doctest_namespace, 'doctest_namespace'),
     (fixtures.record_warnings, 'recwarn'),
 ])
 def test_proxying(isolated, scoped, given, expected, request) -> None:

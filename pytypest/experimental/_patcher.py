@@ -30,8 +30,6 @@ class AttrPatcher:
             self.__patcher.setattr(self.__target, name, value)
 
     def __delattr__(self, name: str) -> None:
-        if name.startswith('_AttrPatcher__'):
-            return super().__delattr__(name)
         self.__patcher.delattr(self.__target, name)
 
 

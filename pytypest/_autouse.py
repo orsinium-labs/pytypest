@@ -10,6 +10,19 @@ if TYPE_CHECKING:
 
 
 def autouse(*fixtures: Fixture[[], None]) -> None:
+    """Register fixtures to be used automatically when entering a scope.
+
+    Can be called only once in runtime.
+
+    ::
+
+        autouse(
+            create_database,
+            clear_cache,
+            fixtures.forbid_networking,
+        )
+
+    """
     if hub.autouse is not None:
         raise RuntimeError('autouse can be called only once')
     hub.autouse = fixtures

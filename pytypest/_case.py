@@ -10,6 +10,19 @@ S = TypeVar('S')
 
 @dataclasses.dataclass(frozen=True)
 class CaseMaker:
+    """Create a new test case to be used with parametrized tests.
+
+    ::
+
+        def _test_add(a: int, b: int, exp: int):
+            assert a + b == exp
+
+        test_add = parametrize(
+            _test_add,
+            case(4, 5, exp=9),
+        )
+
+    """
     _id: str | None = None
     _tags: tuple[str, ...] | None = None
 
@@ -17,9 +30,29 @@ class CaseMaker:
         return Case(args=args, kwargs=kwargs, id=self._id, tags=self._tags)
 
     def id(self, id: str) -> CaseMaker:
+        """Give a name to the test case.
+
+        ::
+
+            test_logout = parametrize(
+                _test_logout,
+                case.id('anonymous_user')(user1),
+            )
+
+        """
         return dataclasses.replace(self, _id=id)
 
     def tags(self, *tags: str) -> CaseMaker:
+        """Mark the case with tags that can be used to filter specific tests.
+
+        ::
+
+            test_logout = parametrize(
+                _test_logout,
+                case.tags('slow', 'integration')(user1),
+            )
+
+        """
         return dataclasses.replace(self, _tags=tags)
 
 
@@ -28,6 +61,10 @@ case = CaseMaker()
 
 @dataclasses.dataclass(frozen=True)
 class Case(Generic[P]):
+    """A single test case for parametrized tests.
+
+    Use `pytypest.case` function to create a new one.
+    """
     args: tuple
     kwargs: dict
     id: str | None = None

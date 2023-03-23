@@ -27,14 +27,29 @@ class Fixture(Generic[P, R]):
     _result: R | Literal[Sentinel.UNSET] = Sentinel.UNSET
 
     @overload
-    def __get__(self, obj: None, objtype) -> Fixture[P, R]:
+    def __get__(self, obj: None, objtype: type) -> Fixture[P, R]:
         pass
 
     @overload
-    def __get__(self, obj: object, objtype) -> R:
+    def __get__(self, obj: object, objtype: type) -> R:
         pass
 
-    def __get__(self, obj, objtype) -> Fixture[P, R] | R:
+    def __get__(self, obj: object | None, objtype: type) -> Fixture[P, R] | R:
+        """Lets fixtures to be used as a descriptor for containers.
+
+        This magic method is what lets fixtures to be set as class attributes
+        and be accessed on the class instance without explicitly calling them.
+
+        ::
+
+            class Fixtures:
+                user = get_user
+
+            def test_user():
+                f = Fixtures()
+                assert f.user.name == 'mark'
+
+        """
         if obj is None:
             return self
         return self.__call__()

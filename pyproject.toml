@@ -39,6 +39,7 @@ lint = [
     "mypy",
     "unify",
     "types-requests",
+    "ruff",
 ]
 docs = [
     "sphinx",
@@ -84,3 +85,20 @@ exclude_lines = [
 
 [tool.coverage.run]
 branch = true
+
+[tool.ruff]
+select = [
+    "E", "W", "F", "N", "B",
+    "COM", "ISC", "PIE", "Q",
+    "SIM", "PTH", "PL", "RUF",
+]
+ignore = [
+    "PLR2004",  # allow hardcoded constants
+    "SIM117",   # allow nested with
+    "SIM105",   # allow try-except-pass
+    "PIE790",   # allow unnecessary pass statements
+]
+target-version = "py38"
+
+[tool.ruff.flake8-quotes]
+inline-quotes = "single"

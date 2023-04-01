@@ -24,7 +24,6 @@ class AttrPatcher:
         if name.startswith('_AttrPatcher__'):
             return super().__setattr__(name, value)
         if isinstance(self.__target, str):
-            self.__target
             self.__patcher.setattr(f'{self.__target}.{name}', value)
         else:
             self.__patcher.setattr(self.__target, name, value)

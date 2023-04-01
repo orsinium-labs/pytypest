@@ -112,6 +112,12 @@ tasks:
       - install:lint
     cmds:
       - "{{.LINT_PYTHON}} -m flake8 {{.CLI_ARGS}} ."
+  ruff:
+    desc: "lint Python code"
+    deps:
+      - install:lint
+    cmds:
+      - "{{.LINT_PYTHON}} -m ruff check {{.CLI_ARGS}} ."
   mypy:
     desc: "check type annotations"
     deps:
@@ -155,6 +161,7 @@ tasks:
   lint:
     desc: "run all linters"
     cmds:
+      - task: ruff
       - task: flake8
       - task: mypy
       - task: isort:check

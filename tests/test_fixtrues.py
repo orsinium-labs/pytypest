@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -41,10 +40,10 @@ def test_make_temp_dir__basename(isolated, scoped) -> None:
 
 
 def test_chdir(isolated, scoped) -> None:
-    dir1 = Path(os.getcwd())
+    dir1 = Path.cwd()
     with scoped('function'):
         fixtures.chdir(dir1.parent)
-        dir2 = Path(os.getcwd())
+        dir2 = Path.cwd()
         assert dir2 == dir1.parent
 
 

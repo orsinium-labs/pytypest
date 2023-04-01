@@ -44,7 +44,7 @@ def forbid_networking(
 
 @fixture
 def chdir(path: Path) -> Iterator[None]:
-    old_path = os.getcwd()
+    old_path = Path.cwd()
     os.chdir(path)
     yield
     os.chdir(old_path)

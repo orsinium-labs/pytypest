@@ -16,7 +16,8 @@ class NetworkGuard:
         self,
         host: bytes | str | None,
         port: bytes | str | int | None,
-        *args, **kwargs
+        *args,
+        **kwargs,
     ) -> list:
         if host not in self.allowed_hosts:
             pytest.fail('connection to the host is not allowed')

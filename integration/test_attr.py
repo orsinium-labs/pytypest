@@ -3,6 +3,7 @@
 Fixtures in a container instance must be available without calling them.
 """
 from pytypest import fixture
+from pytypest.experimental import attr
 
 
 _setup = []
@@ -15,12 +16,12 @@ def fixt() -> int:
 
 
 class Container:
-    val = fixt
+    val = attr(fixt)
 
 
 def test_simple():
     assert _setup == []
-    assert Container.val is fixt
+    assert Container.val.fixture is fixt
     assert _setup == []
     c = Container()
     assert _setup == []

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pytypest import experimental
+from pytypest import experimental, fixture
 
 
 class Global:
@@ -36,3 +36,25 @@ def test_delattr(isolated, scoped):
         del p.a
         assert not hasattr(A, 'a')
     assert A.a == 13
+
+
+def test_attr(isolated, scoped):
+    log = []
+
+    @fixture
+    def fixt():
+        log.append('s')
+        yield 14
+        log.append('t')
+
+    class Container:
+        val = experimental.attr(fixt)
+
+    c = Container()
+    assert Container.val.fixture is fixt
+    with scoped('function'):
+        assert log == []
+        for _ in range(4):
+            assert c.val == 14
+            assert log == ['s']
+    assert log == ['s', 't']

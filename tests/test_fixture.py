@@ -73,28 +73,6 @@ def test_teardown_on_leaving_scope(isolated: None, scoped: Callable) -> None:
     assert log == ['s', 't']
 
 
-def test_container(isolated, scoped):
-    log = []
-
-    @fixture
-    def fixt():
-        log.append('s')
-        yield 14
-        log.append('t')
-
-    class Container:
-        val = fixt
-
-    c = Container()
-    assert Container.val is fixt
-    with scoped('function'):
-        assert log == []
-        for _ in range(4):
-            assert c.val == 14
-            assert log == ['s']
-    assert log == ['s', 't']
-
-
 def test_disallow_double_yield(isolated, scoped):
     @fixture
     def fixt():

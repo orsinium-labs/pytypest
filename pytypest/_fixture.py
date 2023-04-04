@@ -3,9 +3,7 @@ from __future__ import annotations
 import inspect
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import (
-    Callable, Generic, Iterator, Literal, ParamSpec, TypeVar, overload,
-)
+from typing import Callable, Generic, Iterator, Literal, ParamSpec, TypeVar
 
 from ._manager import defer
 from ._scope import Scope
@@ -25,34 +23,6 @@ class Fixture(Generic[P, R]):
     scope: Scope = Scope.FUNCTION
     _iters: list[Iterator[R]] = field(default_factory=list)
     _result: R | Literal[Sentinel.UNSET] = Sentinel.UNSET
-
-    @overload
-    def __get__(self, obj: None, objtype: type) -> Fixture[P, R]:
-        pass
-
-    @overload
-    def __get__(self, obj: object, objtype: type) -> R:
-        pass
-
-    def __get__(self, obj: object | None, objtype: type) -> Fixture[P, R] | R:
-        """Lets fixtures to be used as a descriptor for containers.
-
-        This magic method is what lets fixtures to be set as class attributes
-        and be accessed on the class instance without explicitly calling them.
-
-        ::
-
-            class Fixtures:
-                user = get_user
-
-            def test_user():
-                f = Fixtures()
-                assert f.user.name == 'mark'
-
-        """
-        if obj is None:
-            return self
-        return self.__call__()
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs) -> R:
         if self.scope != Scope.FUNCTION:

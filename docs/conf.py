@@ -1,5 +1,5 @@
-project = 'walnats'
-copyright = '2022, @orsinium'
+project = 'pytypest'
+copyright = '2023, @orsinium'
 author = '@orsinium'
 templates_path = ['_templates']
 html_theme = 'alabaster'

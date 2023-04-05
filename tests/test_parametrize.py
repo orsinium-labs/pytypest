@@ -22,6 +22,7 @@ def test_parametrize() -> None:
         case(b=10, a=9),
         case.id('one')(11, 12),
         case.tags('two', 'three')(13, 14),
+        four=case(15, 16),
     )
     mark: Mark
     (mark,) = wrapped.pytestmark  # type: ignore[attr-defined]
@@ -32,6 +33,7 @@ def test_parametrize() -> None:
             [3, 4], [5, 6], [7, 8], [9, 10],
             pytest.param(11, 12, id='one'),
             pytest.param(13, 14, marks=(pytest.mark.two, pytest.mark.three)),
+            pytest.param(15, 16, id='four'),
         ],
     )
 

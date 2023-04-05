@@ -69,3 +69,6 @@ class Case(Generic[P]):
     kwargs: dict[str, Any]
     id: str | None = None
     tags: tuple[str, ...] | None = None
+
+    def with_id(self, id: str) -> Case[P]:
+        return dataclasses.replace(self, id=id)

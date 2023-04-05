@@ -34,6 +34,17 @@ class AttrPatcher:
 
 @fixture
 def patcher(target: object | str) -> Iterator[Any]:
+    """A fixture to patch and delete attributes of the given object.
+
+    ::
+
+        patcher(logging).info = Mock()
+
+    The object can be also specified as a full import path string::
+
+        patcher('logging').info = Mock()
+
+    """
     monkey_patcher = pytest.MonkeyPatch()
     yield AttrPatcher(monkey_patcher, target)
     monkey_patcher.undo()

@@ -13,6 +13,7 @@
     fixture
     parametrize
     fixtures
+    experimental
     api
     motivation
 

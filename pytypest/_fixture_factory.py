@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import update_wrapper
 from typing import TYPE_CHECKING, Protocol, overload
 
 from ._fixture import Fixture
@@ -171,8 +172,10 @@ def fixture(
 
     """
     if callback is not None:
-        return Fixture(callback, **kwargs)
+        fixture = Fixture(callback, **kwargs)
+        return update_wrapper(fixture, callback)
 
     def wrapper(callback: Callable) -> Fixture:
-        return Fixture(callback, **kwargs)
+        fixture = Fixture(callback, **kwargs)
+        return update_wrapper(fixture, callback)
     return wrapper

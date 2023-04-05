@@ -17,24 +17,42 @@ T = TypeVar('T', covariant=True)
 
 @fixture
 def defer(callback: Callable[[], None]) -> Iterator[None]:
+    """Execute the given callback when leaving the test function.
+
+    It's a nice way to clean up after a test function without
+    creating a fixture or a context manager.
+    """
     yield
     callback()
 
 
 @fixture
 def enter_context(manager: ContextManager[T]) -> Iterator[T]:
+    """
+    Enter the context manager, return its result,
+    and exit the context when leaving the test function.
+
+    It's a bit imilar to `contextlib.ExitStack` in a sense
+    that it helps to keep code indentation low
+    when entering multiple context managers.
+    """
     with manager as value:
         yield value
 
 
 @fixture
 def forbid_networking(
-    allowed_hosts: Sequence[str] = (),
-    allowed_ports: Sequence[int] = (),
+    *,
+    allowed: Sequence[tuple[str, int]] = (),
 ) -> Iterator[None]:
+    """Forbid network connections during the test.
+
+    This fixture is a good candidate for :func:`pytypest.autouse`.
+
+    You can specify exceptions with `allowed_hosts` and `allowed_ports`
+    """
     guard = NetworkGuard(
-        allowed_hosts=frozenset(allowed_hosts),
-        allowed_ports=frozenset(allowed_ports),
+        allowed=frozenset(allowed),
         wrapped=socket.getaddrinfo,
     )
     socket.getaddrinfo = guard

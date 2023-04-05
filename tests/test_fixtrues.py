@@ -106,15 +106,15 @@ def test_enter_context(isolated, scoped) -> None:
 def test_forbid_networking__bad_host(isolated, scoped) -> None:
     with scoped('function'):
         fixtures.forbid_networking()
-        msg = 'connection to the host is not allowed'
+        msg = 'connection to example.com:443 is not allowed'
         with pytest.raises(BaseException, match=msg):
             requests.get('https://example.com/')
 
 
 def test_forbid_networking__bad_port(isolated, scoped) -> None:
     with scoped('function'):
-        fixtures.forbid_networking(allowed_hosts=['example.com'])
-        msg = 'connection to the port is not allowed'
+        fixtures.forbid_networking(allowed=[('example.com', 80)])
+        msg = 'connection to example.com:443 is not allowed'
         with pytest.raises(BaseException, match=msg):
             requests.get('https://example.com/')
 
@@ -122,8 +122,7 @@ def test_forbid_networking__bad_port(isolated, scoped) -> None:
 def test_forbid_networking__allowed_host_port(isolated, scoped) -> None:
     with scoped('function'):
         fixtures.forbid_networking(
-            allowed_hosts=['example.com'],
-            allowed_ports=[443],
+            allowed=[('example.com', 443)],
         )
         requests.get('https://example.com/')
 

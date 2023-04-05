@@ -114,11 +114,14 @@ def fixture(callback: Callable[P, R]) -> Fixture[P, R]:
     pass
 
 
-def fixture(callback: Callable | None = None, **kwargs) -> Fixture[P, R] | Callable:
+def fixture(
+    callback: Callable | None = None,
+    **kwargs,
+) -> Fixture[P, R] | Callable[[Callable], Fixture]:
     """A decorator to create a new fixture.
 
     Fixtures are executed only when called, cached for the given scope,
-    and may have tear down logic that is executed when exiting the scope.
+    and may have teardown logic that is executed when exiting the scope.
 
     ::
 
@@ -136,14 +139,40 @@ def fixture(callback: Callable | None = None, **kwargs) -> Fixture[P, R] | Calla
             # teardown
             db.delete(u)
 
+    You can call the fixture to get the yielded value::
+
         def test_user():
-            u = get_user()
+            user = get_user()
+
+    Or you can use it as a context manager::
+
+        def test_user():
+            with get_user as user:
+                ...
+
+    Fixtures can accept arguments::
+
+        @fixture
+        def get_user(name: str):
             ...
+
+        def test_user():
+            conn = get_user(name='Guido')
+
+    Fixtures without teardown may use `return` instead of `yield`::
+
+        @fixture
+        def get_user() -> User:
+            return User()
+
+    Fixtures can be called not only from test functions,
+    but from other fixtures, pytest fixtures, or helper functions
+    within a test run.
 
     """
     if callback is not None:
         return Fixture(callback, **kwargs)
 
-    def wrapper(callback):
+    def wrapper(callback: Callable) -> Fixture:
         return Fixture(callback, **kwargs)
     return wrapper

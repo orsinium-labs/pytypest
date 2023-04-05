@@ -9,14 +9,23 @@ from ._scope_manager import ScopeManager
 
 
 def defer(scope: Scope, callback: Callable[[], None]) -> None:
+    """Schedule the callback to be called when leaving the scope.
+
+    ::
+
+        defer(Scope.FUNCTION, self.teardown)
+
+    """
     if hub.manager is None:
         raise RuntimeError('pytest plugin is not activated')
     scope_manager = hub.manager.get_scope(scope)
     scope_manager.defer(callback)
 
 
-@dataclass
+@dataclass(frozen=True)
 class Manager:
+    """Holds a stack of scope managers with smaller scope being on top.
+    """
     _scopes: list[ScopeManager] = field(default_factory=list)
 
     def get_scope(self, scope: Scope) -> ScopeManager:

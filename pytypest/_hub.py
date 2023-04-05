@@ -20,6 +20,10 @@ class Hub:
     autouse: tuple[Fixture[[], None], ...] | None = None
 
     def reset(self) -> None:
+        """Clean up all global state.
+
+        Used for pytypest's unit tests' isolation.
+        """
         self.manager = None
         self.request = None
         self.autouse = None

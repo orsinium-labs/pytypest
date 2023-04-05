@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import Generic, ParamSpec, TypeVar
+from typing import Any, Generic, ParamSpec, TypeVar
 
 
 P = ParamSpec('P')
@@ -63,9 +63,9 @@ case = CaseMaker()
 class Case(Generic[P]):
     """A single test case for parametrized tests.
 
-    Use `pytypest.case` function to create a new one.
+    Use :func:`pytypest.case` to create a new one.
     """
     args: tuple
-    kwargs: dict
+    kwargs: dict[str, Any]
     id: str | None = None
     tags: tuple[str, ...] | None = None

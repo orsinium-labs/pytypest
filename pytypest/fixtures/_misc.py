@@ -9,6 +9,7 @@ from typing import (
 )
 
 from .._fixture_factory import fixture
+from .._hub import hub
 from ._helpers import NetworkGuard
 
 
@@ -16,11 +17,17 @@ T = TypeVar('T', covariant=True)
 
 
 @fixture
-def defer(callback: Callable[[], None]) -> Iterator[None]:
+def defer(callback: Callable[[], object]) -> Iterator[None]:
     """Execute the given callback when leaving the test function.
 
     It's a nice way to clean up after a test function without
     creating a fixture or a context manager.
+
+    ::
+
+        stream = open('some-file.txt')
+        defer(stream.close)
+
     """
     yield
     callback()
@@ -35,6 +42,11 @@ def enter_context(manager: ContextManager[T]) -> Iterator[T]:
     It's a bit imilar to `contextlib.ExitStack` in a sense
     that it helps to keep code indentation low
     when entering multiple context managers.
+
+    ::
+
+        stream = enter_context(open('some_file'))
+
     """
     with manager as value:
         yield value
@@ -49,7 +61,13 @@ def forbid_networking(
 
     This fixture is a good candidate for :func:`pytypest.autouse`.
 
-    You can specify exceptions with `allowed_hosts` and `allowed_ports`
+    The `allowed` argument accepts a sequence of `(host, port)` pairs
+    to which connections should still be allowed.
+
+    ::
+
+        forbid_networking(allowed=[('example.com', 443)])
+
     """
     guard = NetworkGuard(
         allowed=frozenset(allowed),
@@ -61,7 +79,14 @@ def forbid_networking(
 
 
 @fixture
-def chdir(path: Path) -> Iterator[None]:
+def chdir(path: Path | str) -> Iterator[None]:
+    """Change the current working dir to the given path.
+
+    ::
+
+        chdir('/')
+
+    """
     old_path = Path.cwd()
     os.chdir(path)
     yield
@@ -72,3 +97,18 @@ def chdir(path: Path) -> Iterator[None]:
 def preserve_mapping(target: MutableMapping) -> Iterator[None]:
     with unittest.mock.patch.dict(target):
         yield
+
+
+def get_project_root() -> Path:
+    """Get the path to the root directory of the project.
+
+    ::
+
+        root = get_project_root()
+        assert (root / 'pyproject.toml').exists()
+
+    https://docs.pytest.org/en/7.1.x/reference/customize.html#finding-the-rootdir
+    """
+    if hub.request is None:
+        raise RuntimeError('pytest plugin is not active')
+    return hub.request.session.config.rootpath

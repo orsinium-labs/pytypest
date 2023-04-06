@@ -181,3 +181,16 @@ def test_preserve_mapping(isolated, scoped):
         del d[5]
         assert d == {1: 7, 3: 4}
     assert d == {1: 2, 3: 4, 5: 6}
+
+
+def test_get_project_root(isolated, scoped):
+    with scoped('function'):
+        root = fixtures.get_project_root()
+        assert (root / 'pyproject.toml').is_file()
+        assert (root / 'pytypest').is_dir()
+
+
+def test_get_project_root__not_active() -> None:
+    msg = 'pytest plugin is not active'
+    with pytest.raises(RuntimeError, match=msg):
+        fixtures.get_project_root()

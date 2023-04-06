@@ -194,3 +194,20 @@ def test_get_project_root__not_active() -> None:
     msg = 'pytest plugin is not active'
     with pytest.raises(RuntimeError, match=msg):
         fixtures.get_project_root()
+
+
+def test_capture_std(isolated, scoped):
+    with scoped('function'):
+        cap = fixtures.capture_std()
+        print('hello')
+        captured = cap.readouterr()
+        assert captured.out == 'hello\n'
+
+
+def test_capture_logs(isolated, scoped):
+    with scoped('function'):
+        import logging
+        cap = fixtures.capture_logs()
+        logging.warning('oh hi mark')
+        record = cap.records[-1]
+        assert record.message == 'oh hi mark'

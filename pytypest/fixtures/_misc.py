@@ -13,7 +13,7 @@ from .._hub import hub
 from ._helpers import NetworkGuard
 
 
-T = TypeVar('T', covariant=True)
+T = TypeVar('T')
 
 
 @fixture
@@ -95,6 +95,21 @@ def chdir(path: Path | str) -> Iterator[None]:
 
 @fixture
 def preserve_mapping(target: MutableMapping) -> Iterator[None]:
+    """Restore the current state of the mapping after leaving the test.
+
+    After calling the fixture, you can safely modify the given mapping,
+    and these changes will be reverted before the next test starts.
+
+    It's not a deep copy, though. If you modify a list inside of the mapping,
+    that modification will escape the test.
+
+    ::
+
+        import sys
+        preserve_mapping(sys.path)
+        sys.path.append(some_path)
+
+    """
     with unittest.mock.patch.dict(target):
         yield
 

@@ -32,6 +32,8 @@ def get_request() -> pytest.FixtureRequest:
 def get_pytest_fixture(name: str) -> Any:
     """Get a pytest fixture by its name.
 
+    A wrapper around :pytest:`pytest.FixtureRequest.getfixturevalue`.
+
     This is useful for using fixtures from third-party pytest plugins.
     All built-in pytest fixtures already have a convenient wrapper in pytypest.
 

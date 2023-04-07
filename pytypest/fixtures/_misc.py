@@ -23,6 +23,8 @@ def defer(callback: Callable[[], object]) -> Iterator[None]:
     It's a nice way to clean up after a test function without
     creating a fixture or a context manager.
 
+    Similar to :pytest:`pytest.FixtureRequest.addfinalizer`.
+
     ::
 
         stream = open('some-file.txt')
@@ -82,6 +84,8 @@ def forbid_networking(
 def chdir(path: Path | str) -> Iterator[None]:
     """Change the current working dir to the given path.
 
+    Similar to :pytest:`pytest.MonkeyPatch.chdir`.
+
     ::
 
         chdir('/')
@@ -106,8 +110,8 @@ def preserve_mapping(target: MutableMapping) -> Iterator[None]:
     ::
 
         import sys
-        preserve_mapping(sys.path)
-        sys.path.append(some_path)
+        preserve_mapping(sys.modules)
+        sys.modules['requests'] = Mock()
 
     """
     with unittest.mock.patch.dict(target):

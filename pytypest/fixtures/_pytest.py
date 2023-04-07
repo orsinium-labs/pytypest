@@ -13,7 +13,7 @@ from .._hub import hub
 def get_request() -> pytest.FixtureRequest:
     """Get meta information about the currently running test.
 
-    A wrapper around ``request`` pytest fixture.
+    A wrapper around :pytest:`request` pytest fixture.
 
     ::
 
@@ -49,15 +49,15 @@ def get_pytest_fixture(name: str) -> Any:
 def capture_std(*, binary: bool = False, fd: bool = False) -> pytest.CaptureFixture:
     """Capture stdout and stderr.
 
-    A wrapper around ``capsys``, ``capfd``, ``capsysbinary``, and ``capfdbinary``
-    pytest fixtures.
+    A wrapper around :pytest:`capsys`, :pytest:`capfd`, :pytest:`capsysbinary`,
+    and :pytest:`capfdbinary` pytest fixtures.
 
     ::
 
         cap = capture_std()
-        print("hello")
+        print('hello')
         captured = cap.readouterr()
-        assert captured.out == "hello\n"
+        assert captured.out.rstrip() == 'hello'
 
     """
     root = 'fd' if fd else 'sys'
@@ -69,7 +69,7 @@ def capture_std(*, binary: bool = False, fd: bool = False) -> pytest.CaptureFixt
 def capture_logs() -> pytest.LogCaptureFixture:
     """Capture all log records.
 
-    A wrapper around ``caplog`` pytest fixture.
+    A wrapper around :pytest:`caplog` pytest fixture.
 
     ::
 
@@ -87,7 +87,7 @@ def capture_logs() -> pytest.LogCaptureFixture:
 def record_warnings() -> pytest.WarningsRecorder:
     """Record all warnings (emitted using ``warnings`` module).
 
-    A wrapper around ``recwarn`` pytest fixture.
+    A wrapper around :pytest:`recwarn` pytest fixture.
     """
     return get_pytest_fixture('recwarn')
 

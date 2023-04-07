@@ -39,6 +39,13 @@ def test_make_temp_dir__basename(isolated, scoped) -> None:
         assert path.name == 'hello'
 
 
+def test_make_temp_dir__numbered(isolated, scoped) -> None:
+    with scoped('function'):
+        path = fixtures.make_temp_dir('hello', numbered=True)
+        assert path.is_dir()
+        assert path.name == 'hello0'
+
+
 def test_chdir(isolated, scoped) -> None:
     dir1 = Path.cwd()
     with scoped('function'):
@@ -211,3 +218,12 @@ def test_capture_logs(isolated, scoped):
         logging.warning('oh hi mark')
         record = cap.records[-1]
         assert record.message == 'oh hi mark'
+
+
+def test_record_warnings(isolated, scoped):
+    with scoped('function'):
+        import warnings
+        rec = fixtures.record_warnings()
+        warnings.warn('oh hi mark', UserWarning, stacklevel=1)
+        w = rec.pop(UserWarning)
+        assert str(w.message) == 'oh hi mark'

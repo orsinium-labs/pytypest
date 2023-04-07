@@ -1,21 +1,39 @@
 # Fixtures
 
 ```{eval-rst}
-.. autofunction:: pytypest.fixtures.capture_logs
-.. autofunction:: pytypest.fixtures.capture_std
-.. autofunction:: pytypest.fixtures.chdir
-.. autofunction:: pytypest.fixtures.defer
-.. autofunction:: pytypest.fixtures.delattr
-.. autofunction:: pytypest.fixtures.enter_context
-.. autofunction:: pytypest.fixtures.forbid_networking
-.. autofunction:: pytypest.fixtures.get_project_root
-.. autofunction:: pytypest.fixtures.get_pytest_fixture
-.. autofunction:: pytypest.fixtures.get_request
-.. autofunction:: pytypest.fixtures.make_temp_dir
-.. autofunction:: pytypest.fixtures.monkeypatch
-.. autofunction:: pytypest.fixtures.preserve_mapping
-.. autofunction:: pytypest.fixtures.record_warnings
-.. autofunction:: pytypest.fixtures.setattr
+.. currentmodule:: pytypest.fixtures
+.. autosummary::
+    :nosignatures:
 
-.. _capfd: https://docs.pytest.org/en/latest/reference/reference.html#capfd
+    capture_logs
+    capture_std
+    chdir
+    defer
+    delattr
+    enter_context
+    forbid_networking
+    get_project_root
+    get_pytest_fixture
+    get_request
+    make_temp_dir
+    monkeypatch
+    preserve_mapping
+    record_warnings
+    setattr
+
+.. autofunction:: capture_logs
+.. autofunction:: capture_std
+.. autofunction:: chdir
+.. autofunction:: defer
+.. autofunction:: delattr
+.. autofunction:: enter_context
+.. autofunction:: forbid_networking
+.. autofunction:: get_project_root
+.. autofunction:: get_pytest_fixture
+.. autofunction:: get_request
+.. autofunction:: make_temp_dir
+.. autofunction:: monkeypatch
+.. autofunction:: preserve_mapping
+.. autofunction:: record_warnings
+.. autofunction:: setattr
 ```

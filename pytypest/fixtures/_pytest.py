@@ -88,20 +88,57 @@ def record_warnings() -> pytest.WarningsRecorder:
     """Record all warnings (emitted using ``warnings`` module).
 
     A wrapper around :pytest:`recwarn` pytest fixture.
+
+    ::
+
+        import warnings
+        rec = fixtures.record_warnings()
+        warnings.warn('oh hi mark', UserWarning)
+        w = rec.pop(UserWarning)
+        assert str(w.message) == 'oh hi mark'
+
     """
     return get_pytest_fixture('recwarn')
 
 
 @fixture
 def make_temp_dir(basename: str | None = None, numbered: bool = True) -> Path:
-    factory: pytest.TempPathFactory = get_pytest_fixture('tmp_path_factory')
+    """Create a temporary directory.
+
+    A wrapper around :pytest:`tmp_path` and :pytest:`tmp_path_factory`
+    pytest fixtures.
+
+    Args:
+        basename: if specified, the created directory will have this name.
+        numbered: if True (default), ensure the directory is unique
+            by adding a numbered suffix greater than any existing one.
+
+    ::
+
+        dir_path = fixtures.make_temp_dir()
+        file_path = dir_path / 'example.py'
+        file_path.write_text('1 + 2')
+        ...
+        content = file_path.read_text()
+        assert content == '1 + 2'
+
+    """
     if basename is not None:
+        factory: pytest.TempPathFactory = get_pytest_fixture('tmp_path_factory')
         return factory.mktemp(basename=basename, numbered=numbered)
-    return factory.getbasetemp()
+    return get_pytest_fixture('tmp_path')
 
 
 @fixture
 def monkeypatch() -> Iterator[pytest.MonkeyPatch]:
+    """Patch attributes of objects for the duration of test.
+
+    A wrapper around :pytest:`monkeypatch` pytest fixture.
+
+    Usually, you don't need to use this fixture directly. The preferred way to
+    patch things is using :func:`pytypest.fixtures.setattr`,
+    :func:`pytypest.fixtures.delattr`, and :func:`pytypest.fixtures.preserve_mapping`.
+    """
     patcher = pytest.MonkeyPatch()
     yield patcher
     patcher.undo()
@@ -115,6 +152,20 @@ def setattr(
     *,
     must_exist: bool = True,
 ) -> Iterator[None]:
+    """Patch an attribute for the duration of test.
+
+    A wrapper around :pytest:`pytest.MonkeyPatch.setattr`.
+
+    The target can be either the object to patch or the full import path to the object.
+    The target can be any object, including modules, classes, methods, and functions.
+
+    ::
+
+        from unittest.mock import Mock
+        mock = Mock()
+        setattr('logging', 'info', mock)
+
+    """
     patcher = pytest.MonkeyPatch()
     if isinstance(target, str):
         patcher.setattr(f'{target}.{name}', value, raising=must_exist)
@@ -131,7 +182,17 @@ def delattr(
     *,
     must_exist: bool = True,
 ) -> Iterator[None]:
-    """Delete attribute of an object.
+    """Delete attribute of an object for the duration of test.
+
+    A wrapper around :pytest:`pytest.MonkeyPatch.delattr`.
+
+    The target can be either the object to patch or the full import path to the object.
+    The target can be any object, including modules, classes, methods, and functions.
+
+    ::
+
+        delattr(logging, 'info')
+
     """
     patcher = pytest.MonkeyPatch()
     if isinstance(target, str):

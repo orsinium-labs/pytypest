@@ -5,6 +5,8 @@
 :end-before: "## Usage"
 ```
 
+**Source code:** [github.com/orsinium-labs/pytypest](https://github.com/orsinium-labs/pytypest).
+
 ```{eval-rst}
 .. toctree::
     :maxdepth: 1

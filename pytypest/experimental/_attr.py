@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Generic, ParamSpec, TypeVar, overload
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, overload
+from typing_extensions import ParamSpec
 
 
 if TYPE_CHECKING:

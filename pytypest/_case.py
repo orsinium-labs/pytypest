@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import dataclasses
-from typing import Any, Generic, ParamSpec, TypeVar
+from typing import Any, Generic, TypeVar
+from typing_extensions import ParamSpec
 
 
 P = ParamSpec('P')

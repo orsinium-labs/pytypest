@@ -25,7 +25,10 @@ keywords = [
     "framework",
     "fixtures",
 ]
-dependencies = ["pytest"]
+dependencies = [
+    "pytest",
+    "typing-extensions",
+]
 
 [project.optional-dependencies]
 test = [
@@ -52,7 +55,7 @@ Source = "https://github.com/orsinium-labs/pytypest"
 
 [tool.mypy]
 files = ["pytypest", "tests", "integration"]
-python_version = "3.10"
+python_version = "3.8"
 ignore_missing_imports = true
 # follow_imports = "silent"
 show_error_codes = true

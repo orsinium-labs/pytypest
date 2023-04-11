@@ -9,6 +9,7 @@ from ._scope import Scope
 
 if TYPE_CHECKING:
     from typing import Callable, Iterator, Literal, TypeVar
+
     from typing_extensions import ParamSpec
 
     R = TypeVar('R')

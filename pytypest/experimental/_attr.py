@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generic, TypeVar, overload
+
 from typing_extensions import ParamSpec
 
 

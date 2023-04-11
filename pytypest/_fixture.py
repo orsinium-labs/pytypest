@@ -4,6 +4,7 @@ import inspect
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Callable, Generic, Iterator, Literal, TypeVar
+
 from typing_extensions import ParamSpec
 
 from ._manager import defer

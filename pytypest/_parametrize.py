@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import inspect
-from typing import TYPE_CHECKING, Callable, ParamSpec
+from typing import TYPE_CHECKING, Callable
 
 import pytest
+from typing_extensions import ParamSpec
 
 from ._case import Case
 

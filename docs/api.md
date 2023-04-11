@@ -32,6 +32,8 @@
 
 ```{eval-rst}
 .. autoclass:: pytypest._fixture.Fixture()
+    :members: __call__, __enter__, setup, teardown
+.. autoclass:: pytypest._case.CaseMaker()
     :members:
 .. autoclass:: pytypest._case.Case()
     :members:

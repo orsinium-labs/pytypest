@@ -6,7 +6,6 @@
 ```
 
 ```{eval-rst}
-
 .. toctree::
     :maxdepth: 1
 
@@ -14,7 +13,7 @@
     parametrize
     fixtures
     experimental
+    recipes
     api
     motivation
-
 ```

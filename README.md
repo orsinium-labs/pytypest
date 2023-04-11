@@ -12,6 +12,8 @@ Features:
 + Fixtures can be cached, and you are in control of for how long.
 + Fixtures can accept arguments.
 
+Check out [motivation](https://pytypest.orsinium.dev/motivation.html) if you want to know more about why this project was born.
+
 ## Installation
 
 ```bash

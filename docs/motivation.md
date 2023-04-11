@@ -5,7 +5,7 @@ The framework was created to solve very specific problems with pytest inherit in
 ## pytest.fixture
 
 1. **Fixtures aren't type annotated**. To have an autocomplete for a fixture inside of test function, I have to explicitly annotate the fixture each time I use it.
-1. **Fixtures aren't namespaced**. Big projects end up with fixtures like `client_with_basket_and_items_in_it`.
+1. **Fixtures aren't namespaced**. Big projects end up with fixtures like `client_with_cart_and_items_in_it`.
 1. **Tests cannot pass parameters into fixtures**. People end up making awful workarounds like overriding fixtures, or parametrizing the test for just the fixture, and it's all very implicit and hard to maintain.
 1. **Fixtures can be overriden in submodules**. When there is a test function that uses `parcel` fixture, and the project defines 6 different fixtures with the same name, you need to check each one of them, and find the one that shares the most of the path with the test.
 1. **Go-to-definition on fixtures doesn't work**. Again, each time you want to see the fixture implementation, it turns into a treasure hunt.

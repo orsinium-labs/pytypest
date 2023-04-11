@@ -60,6 +60,7 @@ Be careful with the scope. If the fixture returns a mutable object, one test may
 Fixtures can accept arguments. It's especially useful for factories.
 
 ```python
+@fixture
 def make_user(name: str = 'Guido') -> Iterator[User]:
     u = User(name=name)
     u.save()

@@ -20,4 +20,22 @@ python3 -m pip install pytypest
 
 ## Usage
 
-...
+Fixtures are regular helper functions that `yield` their result and do teardown afterwards:
+
+```python
+from typing import Iterator
+from pytypest import fixture
+
+@fixture
+def get_user(anonymous: bool) -> Iterator[User]:
+    u = User(anonymous=anonymous)
+    u.save()
+    yield u
+    u.delete()
+
+def test_user() -> None:
+    u = get_user(anonymous=False)
+    assert u.anonymous is False
+```
+
+Compared to built-in pytest fixtures, these are explicit, type-safe, can accept arguments, support go-to-definition in IDE, and can be used as context managers. And like pytest fixtures, they are cached and can be scoped to the module or the whole session.

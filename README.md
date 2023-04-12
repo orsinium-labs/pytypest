@@ -6,7 +6,7 @@ Features:
 
 + 100% type safe.
 + Great IDE integration, go-to-definition always takes you in the right place.
-+ Test parametrization that is redable even with many arguments.
++ Test parametrization that is readable even with many arguments.
 + Plug-and-play integration with pytest.
 + No vendor-lock, you can use only the features you need and don't touch the rest.
 + Fixtures can be cached, and you are in control of for how long.

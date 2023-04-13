@@ -80,7 +80,7 @@ assert cache1 is cache2
 
 ## Context manager
 
-You can any fixture as a context manager. Then setup will be executed when entering the context and teardown when leaving it. The cached value, even if available, will not be used.
+You can use any fixture as a context manager. Then setup will be executed when entering the context and teardown when leaving it. The cached value, even if available, will not be used.
 
 ```python
 with connect_to_db() as connection:

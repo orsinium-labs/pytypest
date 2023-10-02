@@ -9,7 +9,7 @@ from ._parametrize import parametrize
 from ._scope import Scope
 
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 __all__ = [
     'autouse',
     'case',
